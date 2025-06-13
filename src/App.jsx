@@ -1,8 +1,9 @@
-import Login from './login-signup/login';
-/*step 1*/
+import Login from './login-signup/login';     
+import UsersList from './login-signup/signUp';  
+/* 1/2 step 2*/
 function App() {
   return (
-    <Login />
+    <UsersList />
   );
 }
 
