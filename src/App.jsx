@@ -1,6 +1,6 @@
 import Login from './login-signup/login';     
 import UsersList from './login-signup/signUp';  
-/* 1/2 step 2*/
+/*display info*/
 function App() {
   return (
     <UsersList />

@@ -1,33 +1,29 @@
-import useUsers from '../../models/useUsers';
-
+import React, { useState } from 'react';
+import useAddUser from '../../models/useAddUser';
 
 export default function UsersList() {
-  const { users, loading, error } = useUsers();
+  const { addUser, loading, error, successMessage } = useAddUser();
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
 
-  if (loading) return <div className="text-center mt-5">Loading...</div>;
-  if (error) return <div className="text-danger text-center mt-5">Error: {error.message}</div>;
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await addUser(form);
+  };
 
   return (
-    <div className="container mt-5">
-      <h2 className="mb-4">User List</h2>
-      <table className="table table-striped">
-        <thead className="table-dark">
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Password</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, idx) => (
-            <tr key={idx}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.password}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Name" />
+      <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email" />
+      <input type="password" name="password" value={form.password} onChange={handleChange} placeholder="Password" />
+      <button type="submit" disabled={loading}>
+        {loading ? 'Saving...' : 'Add User'}
+      </button>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+    </form>
   );
 }

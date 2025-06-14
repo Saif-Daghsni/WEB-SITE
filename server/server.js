@@ -37,11 +37,35 @@ app.get('/getUser', async (req, res) => {
   }
 });
 
+// POST route to save a new user
+app.post('/addUser', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // Basic validation
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const newUser = new userModel({ name, email, password });
+    await newUser.save();
+
+    res.status(201).json({ message: 'User added successfully', user: newUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to add user' });
+  }
+});
+
+
+
 // Error Handling Middleware
+// ✅ CORRECT
 app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Server error!' });
 });
+
 
 // Start Server
 // eslint-disable-next-line no-undef
